@@ -22,3 +22,12 @@ targets:
         CODE_SIGNING_ALLOWED: "NO"
         CODE_SIGNING_REQUIRED: "NO"
         CODE_SIGN_IDENTITY: ""
+schemes:
+  TikTokWeb:
+    build:
+      targets:
+        TikTokWeb: all
+    run:
+      config: Release
+    archive:
+      config: Release
