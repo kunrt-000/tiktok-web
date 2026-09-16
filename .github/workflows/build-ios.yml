@@ -9,20 +9,17 @@ jobs:
   build-ios:
     runs-on: macos-latest
     steps:
-      - name: 检出代码
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: 安装 XcodeGen
+      - name: Install XcodeGen
         run: brew install xcodegen
 
-      - name: 生成 Xcode 工程
+      - name: Generate Xcode project
         working-directory: ios
         run: xcodegen generate
 
-      - name: 查看可用 SDK 与模拟器
-        run: xcodebuild -showsdks
-
-      - name: 构建（未签名）
+      - name: Build unsigned
         working-directory: ios
         run: |
           xcodebuild -project TikTokWeb.xcodeproj \
@@ -35,13 +32,13 @@ jobs:
             -derivedDataPath build \
             build
 
-      - name: 打包成 IPA
+      - name: Package IPA
         run: |
           mkdir -p Payload
           cp -R ios/build/Build/Products/Release-iphoneos/TikTokWeb.app Payload/
           zip -qr TikTokWeb-unsigned.ipa Payload
 
-      - name: 上传 IPA
+      - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: TikTokWeb-unsigned-ipa
