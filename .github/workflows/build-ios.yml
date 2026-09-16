@@ -1,10 +1,46 @@
-name: Test
+name: Build iOS IPA
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ main, master ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  build-ios:
+    runs-on: macos-latest
     steps:
-      - run: echo hello
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        working-directory: ios
+        run: xcodegen generate
+
+      - name: Build unsigned
+        working-directory: ios
+        run: |
+          xcodebuild -project TikTokWeb.xcodeproj \
+            -scheme TikTokWeb \
+            -sdk iphoneos \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            -derivedDataPath build \
+            build
+
+      - name: Package IPA
+        run: |
+          mkdir -p Payload
+          cp -R ios/build/Build/Products/Release-iphoneos/TikTokWeb.app Payload/
+          zip -qr TikTokWeb-unsigned.ipa Payload
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: TikTokWeb-unsigned-ipa
+          path: TikTokWeb-unsigned.ipa
+          retention-days: 30
