@@ -1,0 +1,12 @@
+# 安卓构建产物
+build/
+
+# 签名密钥（敏感，绝不提交）
+keystore/
+
+# 打包产物
+*.apk
+*.idsig
+
+# 根目录演示截图
+/shop_entrance_*.png

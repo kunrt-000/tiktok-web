@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 「商家」入口：仅在个人主页显示，点击进入商家端 -->
+    <item
+        android:id="@+id/action_merchant"
+        android:showAsAction="always"
+        android:title="@string/merchant" />
+    <!-- 「商城」入口：仅在个人主页显示，点击进入商城 -->
+    <item
+        android:id="@+id/action_mall"
+        android:showAsAction="always"
+        android:title="@string/mall" />
+</menu>
